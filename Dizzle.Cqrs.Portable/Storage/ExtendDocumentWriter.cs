@@ -19,9 +19,9 @@ namespace Dizzle.Cqrs.Portable.Storage
         /// <param name="update">The update method (called to update an existing entity, if it exists).</param>
         /// <param name="hint">The hint.</param>
         /// <returns></returns>
-        public static async Task<TEntity> AddOrUpdate<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, Func<TEntity> addFactory, Action<TEntity> update, AddOrUpdateHint hint = AddOrUpdateHint.ProbablyExists)
+        public static TEntity AddOrUpdate<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, Func<TEntity> addFactory, Action<TEntity> update, AddOrUpdateHint hint = AddOrUpdateHint.ProbablyExists)
         {
-            return await self.AddOrUpdate(key, addFactory, entity =>
+            return self.AddOrUpdate(key, addFactory, entity =>
             {
                 update(entity);
                 return entity;
@@ -38,9 +38,9 @@ namespace Dizzle.Cqrs.Portable.Storage
         /// <param name="updateViewFactory">The update method (called to update an existing entity, if it exists).</param>
         /// <param name="hint">The hint.</param>
         /// <returns></returns>
-        public static async Task<TEntity> AddOrUpdate<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, TEntity newView, Action<TEntity> updateViewFactory, AddOrUpdateHint hint = AddOrUpdateHint.ProbablyExists)
+        public static TEntity AddOrUpdate<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, TEntity newView, Action<TEntity> updateViewFactory, AddOrUpdateHint hint = AddOrUpdateHint.ProbablyExists)
         {
-            return await self.AddOrUpdate(key, () => newView, view =>
+            return self.AddOrUpdate(key, () => newView, view =>
             {
                 updateViewFactory(view);
                 return view;
@@ -57,9 +57,9 @@ namespace Dizzle.Cqrs.Portable.Storage
         /// <param name="key">The key.</param>
         /// <param name="newEntity">The new entity.</param>
         /// <returns></returns>
-        public static async Task<TEntity> Add<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, TEntity newEntity)
+        public static  TEntity Add<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, TEntity newEntity)
         {
-            return await self.AddOrUpdate(key, newEntity, e =>
+            return  self.AddOrUpdate(key, newEntity, e =>
             {
                 var txt = String.Format("Entity '{0}' with key '{1}' should not exist.", typeof(TEntity).Name, key);
                 throw new InvalidOperationException(txt);
@@ -76,9 +76,9 @@ namespace Dizzle.Cqrs.Portable.Storage
         /// <param name="key">The key.</param>
         /// <param name="change">The change.</param>
         /// <returns></returns>
-        public static async Task<TEntity> UpdateOrThrow<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, Func<TEntity, TEntity> change)
+        public static TEntity UpdateOrThrow<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, Func<TEntity, TEntity> change)
         {
-            return await self.AddOrUpdate(key, () =>
+            return self.AddOrUpdate(key, () =>
             {
                 var txt = String.Format("Failed to load '{0}' with key '{1}'.", typeof(TEntity).Name, key);
                 throw new InvalidOperationException(txt);
@@ -93,9 +93,9 @@ namespace Dizzle.Cqrs.Portable.Storage
         /// <param name="key">The key.</param>
         /// <param name="change">The change.</param>
         /// <returns></returns>
-        public static async Task<TEntity> UpdateOrThrow<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, Action<TEntity> change)
+        public static TEntity UpdateOrThrow<TKey, TEntity>(this IDocumentWriter<TKey, TEntity> self, TKey key, Action<TEntity> change)
         {
-            return await self.AddOrUpdate(key, () =>
+            return self.AddOrUpdate(key, () =>
             {
                 var txt = String.Format("Failed to load '{0}' with key '{1}'.", typeof(TEntity).Name, key);
                 throw new InvalidOperationException(txt);
@@ -112,11 +112,11 @@ namespace Dizzle.Cqrs.Portable.Storage
         /// <param name="update">The update.</param>
         /// <param name="hint">The hint.</param>
         /// <returns></returns>
-        public static async Task<TView> UpdateEnforcingNew<TKey, TView>(this IDocumentWriter<TKey, TView> self, TKey key,
+        public static TView UpdateEnforcingNew<TKey, TView>(this IDocumentWriter<TKey, TView> self, TKey key,
             Action<TView> update, AddOrUpdateHint hint = AddOrUpdateHint.ProbablyExists)
             where TView : new()
         {
-            return await self.AddOrUpdate(key, () =>
+            return self.AddOrUpdate(key, () =>
             {
                 var view = new TView();
                 update(view);
@@ -128,10 +128,10 @@ namespace Dizzle.Cqrs.Portable.Storage
             }, hint);
         }
 
-        public static async Task<TView> UpdateEnforcingNew<TView>(this IDocumentWriter<unit, TView> self, Action<TView> update, AddOrUpdateHint hint = AddOrUpdateHint.ProbablyExists)
+        public static TView UpdateEnforcingNew<TView>(this IDocumentWriter<unit, TView> self, Action<TView> update, AddOrUpdateHint hint = AddOrUpdateHint.ProbablyExists)
             where TView : new()
         {
-            return await self.UpdateEnforcingNew(unit.it, update, hint);
+            return self.UpdateEnforcingNew(unit.it, update, hint);
 
         }
     }

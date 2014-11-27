@@ -11,7 +11,7 @@ using Windows.Storage;
 namespace Dizzle.Cqrs.Universal.Storage
 {
     public sealed class IsolatedStorageDocumentReaderWriter<TKey, TEntity> : IDocumentReader<TKey, TEntity>,
-                                                             IDocumentWriter<TKey, TEntity>
+                                                                             IDocumentWriter<TKey, TEntity>
     {
         readonly IDocumentStrategy _strategy;
         readonly string _folder;
@@ -22,9 +22,9 @@ namespace Dizzle.Cqrs.Universal.Storage
             _folder = Path.Combine(directoryPath, strategy.GetEntityBucket<TEntity>());
         }
 
-        public async void InitIfNeeded()
+        public void InitIfNeeded()
         {
-            await Directory.CreateDirectory(_folder);
+            Directory.CreateDirectory(_folder);
         }
 
         public bool TryGet(TKey key, out TEntity view)
@@ -33,14 +33,14 @@ namespace Dizzle.Cqrs.Universal.Storage
             try
             {
                 var name = GetName(key);
-                if (!File.Exists(name).Result)
+                if (!File.Exists(name))
                     return false;
                 var file = ApplicationData.Current.LocalFolder.CreateFileAsync(name,CreationCollisionOption.OpenIfExists).AsTask().Result;
                 using (var fileStream = file.OpenStreamForReadAsync().Result)
                 {
                     using (var stream = new MemoryStream())
                     {
-                        fileStream.CopyToAsync(stream);
+                        fileStream.CopyToAsync(stream).Wait();
                         stream.Seek(0, SeekOrigin.Begin);
                         if (stream.Length == 0)
                             return false;
@@ -49,18 +49,18 @@ namespace Dizzle.Cqrs.Universal.Storage
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception exc)
             {
                 return false;
             }
         }
 
-        string GetName(TKey key)
+        private string GetName(TKey key)
         {
             return Path.Combine(_folder, _strategy.GetEntityLocation<TEntity>(key));
         }
 
-        public async Task<TEntity> AddOrUpdate(TKey key, Func<TEntity> addFactory, Func<TEntity, TEntity> update,
+        public TEntity AddOrUpdate(TKey key, Func<TEntity> addFactory, Func<TEntity, TEntity> update,
             AddOrUpdateHint hint)
         {
             var name = GetName(key);
@@ -71,56 +71,50 @@ namespace Dizzle.Cqrs.Universal.Storage
                 // to avoid NTFS performance degradation (when there are more than 
                 // 10000 files per folder). Kudos to Gabriel Schenker for pointing this out
                 var subfolder = Path.GetDirectoryName(name);
-                if (subfolder != null && !await Directory.Exists(subfolder))
-                    await Directory.CreateDirectory(subfolder);
+                if (subfolder != null && !Directory.Exists(subfolder))
+                    Directory.CreateDirectory(subfolder);
 
+                var file = ApplicationData.Current.LocalFolder.CreateFileAsync(name, CreationCollisionOption.OpenIfExists).AsTask().Result;
 
-                // we are locking this file.
-                //using (var file = File.Open(name, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None))
-                //using (
-                var file = await ApplicationData.Current.LocalFolder.CreateFileAsync(name,CreationCollisionOption.OpenIfExists);
-                
-                //{
-                    byte[] initial = new byte[0];
-                    TEntity result;
-                    var props = await file.GetBasicPropertiesAsync();
-                    if (props.Size == 0)
-                    {
-                        result = addFactory();
-                    }
-                    else
-                    {
-                        using (var mem = new MemoryStream())
-                        {
-                            using (var fileStream = await file.OpenStreamForReadAsync())
-                            {
-                                await fileStream.CopyToAsync(mem);
-                                mem.Seek(0, SeekOrigin.Begin);
-                                var entity = _strategy.Deserialize<TEntity>(mem);
-                                initial = mem.ToArray();
-                                result = update(entity);
-                            }
-                        }
-                    }
-
-                    // some serializers have nasty habit of closing the
-                    // underling stream
+                byte[] initial = new byte[0];
+                TEntity result;
+                var props = file.GetBasicPropertiesAsync().AsTask().Result;
+                if (props.Size == 0)
+                {
+                    result = addFactory();
+                }
+                else
+                {
                     using (var mem = new MemoryStream())
                     {
-                        _strategy.Serialize(result, mem);
-                        var data = mem.ToArray();
-
-                        if (!data.SequenceEqual(initial))
+                        using (var fileStream = file.OpenStreamForReadAsync().AsAsyncOperation().AsTask().Result)
                         {
-                            //overwrite file
-                            //await file.DeleteAsync();
-                            file = await ApplicationData.Current.LocalFolder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting);
-                            await FileIO.WriteBytesAsync(file, data);
+                            fileStream.CopyToAsync(mem).Wait();
+                            mem.Seek(0, SeekOrigin.Begin);
+                            var entity = _strategy.Deserialize<TEntity>(mem);
+                            initial = mem.ToArray();
+                            result = update(entity);
                         }
                     }
+                }
 
-                    return result;
-                //}
+                // some serializers have nasty habit of closing the
+                // underling stream
+                using (var mem = new MemoryStream())
+                {
+                    _strategy.Serialize(result, mem);
+                    var data = mem.ToArray();
+
+                    if (!data.SequenceEqual(initial))
+                    {
+                        //overwrite file
+                        file = ApplicationData.Current.LocalFolder.CreateFileAsync(name, CreationCollisionOption.ReplaceExisting).AsTask().Result;
+                        FileIO.WriteBytesAsync(file, data).AsTask().Wait();
+                    }
+                }
+
+                return result;
+
             }
             catch (Exception)
             {
@@ -131,12 +125,12 @@ namespace Dizzle.Cqrs.Universal.Storage
             }
         }
 
-        public async Task<bool> TryDelete(TKey key)
+        public bool TryDelete(TKey key)
         {
             var name = GetName(key);
-            if (await File.Exists(name))
+            if (File.Exists(name))
             {
-                await File.Delete(name);
+                File.Delete(name);
                 return true;
             }
             return false;

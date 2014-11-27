@@ -41,7 +41,7 @@ namespace Dizzle.Cqrs.Portable.Storage
         }
 
 
-        public async Task<TEntity> AddOrUpdate(TKey key, Func<TEntity> addFactory, Func<TEntity, TEntity> update, AddOrUpdateHint hint)
+        public TEntity AddOrUpdate(TKey key, Func<TEntity> addFactory, Func<TEntity, TEntity> update, AddOrUpdateHint hint)
         {
             var result = default(TEntity);
             _store.AddOrUpdate(GetName(key), s =>
@@ -70,7 +70,7 @@ namespace Dizzle.Cqrs.Portable.Storage
         }
 
 
-        public async Task<bool> TryDelete(TKey key)
+        public bool TryDelete(TKey key)
         {
             byte[] bytes;
             return _store.TryRemove(GetName(key), out bytes);

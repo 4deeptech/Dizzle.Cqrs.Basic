@@ -10,11 +10,11 @@ namespace Dizzle.Cqrs.Portable.Universal
 {
     public static class Directory
     {
-        public async static Task<bool> Exists(string path)
+        public static bool Exists(string path)
         {
             try
             {
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(path);
+                StorageFolder folder = ApplicationData.Current.LocalFolder.GetFolderAsync(path).AsTask().Result;
                 //no exception means file exists
                 return true;
             }
@@ -25,12 +25,12 @@ namespace Dizzle.Cqrs.Portable.Universal
             }
         }
 
-        public async static Task<bool> Delete(string path, bool recursive)
+        public static bool Delete(string path, bool recursive)
         {
             try
             {
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(path);
-                await folder.DeleteAsync();
+                StorageFolder folder = ApplicationData.Current.LocalFolder.GetFolderAsync(path).AsTask().Result;
+                folder.DeleteAsync().AsTask().Wait();
                 //no exception means file exists
                 return true;
             }
@@ -41,11 +41,11 @@ namespace Dizzle.Cqrs.Portable.Universal
             }
         }
 
-        public async static Task<bool> CreateDirectory(string path)
+        public static bool CreateDirectory(string path)
         {
             try
             {
-                StorageFolder folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(path);
+                StorageFolder folder = ApplicationData.Current.LocalFolder.CreateFolderAsync(path).AsTask().Result;
                 //no exception means folder already exists
                 return true;
             }
@@ -59,11 +59,11 @@ namespace Dizzle.Cqrs.Portable.Universal
 
     public static class File
     {
-        public async static Task<bool> Exists(string path)
+        public static bool Exists(string path)
         {
             try
             {
-                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(path);
+                var file = ApplicationData.Current.LocalFolder.GetFileAsync(path).AsTask().Result;
                 //no exception means file exists
                 return true;
             }
@@ -74,12 +74,12 @@ namespace Dizzle.Cqrs.Portable.Universal
             }
         }
 
-        public async static Task<bool> Delete(string path)
+        public static bool Delete(string path)
         {
             try
             {
-                var file = await ApplicationData.Current.LocalFolder.GetFileAsync(path);
-                await file.DeleteAsync();
+                var file = ApplicationData.Current.LocalFolder.GetFileAsync(path).AsTask().Result;
+                file.DeleteAsync().AsTask().Wait();
                 //no exception means file exists
                 return true;
             }

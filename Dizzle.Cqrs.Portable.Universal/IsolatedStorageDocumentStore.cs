@@ -52,16 +52,15 @@ namespace Dizzle.Cqrs.Universal.Storage
         }
 
 
-        public async Task<List<DocumentRecord>> EnumerateContents(string bucket)
+        public List<DocumentRecord> EnumerateContents(string bucket)
         {
             List<DocumentRecord> contents = new List<DocumentRecord>();
             var full = Path.Combine(_folderPath, bucket);
-            //Windows.Storage.ApplicationData.Current.LocalFolder.Path
             StorageFolder folder = null;
 
             try
             {
-                folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(full);
+                folder = ApplicationData.Current.LocalFolder.GetFolderAsync(full).AsTask().Result;
                 //no exception means file exists
             }
             catch (FileNotFoundException ex)
@@ -70,10 +69,10 @@ namespace Dizzle.Cqrs.Universal.Storage
                 return contents;
             }
             var fullFolder = folder.Path;
-            foreach(StorageFile info in await folder.GetFilesAsync())
+            foreach (StorageFile info in folder.GetFilesAsync().AsTask().Result)
             {
                 var path = fullFolder.Remove(0, fullFolder.Length + 1);
-                IBuffer buf = await FileIO.ReadBufferAsync(info);
+                IBuffer buf = FileIO.ReadBufferAsync(info).AsTask().Result;
                 using (DataReader dataReader = DataReader.FromBuffer(buf)) 
                 {
                     byte[] bytes = new byte[buf.Length];
@@ -83,26 +82,16 @@ namespace Dizzle.Cqrs.Universal.Storage
                 
             }
             return contents;
-            //var dir = new DirectoryInfo(full);
-            //if (!dir.Exists) yield break;
-
-            //var fullFolder = dir.FullName;
-            //foreach (var info in dir.EnumerateFiles("*", SearchOption.AllDirectories))
-            //{
-            //    var fullName = info.FullName;
-            //    var path = fullName.Remove(0, fullFolder.Length + 1).Replace(Path.DirectorySeparatorChar, '/');
-            //    yield return new DocumentRecord(path, () => File.ReadAllBytes(fullName));
-            //}
         }
 
-        public async void WriteContents(string bucket, IEnumerable<DocumentRecord> records)
+        public void WriteContents(string bucket, IEnumerable<DocumentRecord> records)
         {
             var buck = Path.Combine(_folderPath, bucket);
             StorageFolder folder = null;
             bool created = false;
             try
             {
-                folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(buck);
+                folder = ApplicationData.Current.LocalFolder.GetFolderAsync(buck).AsTask().Result;
                 //no exception means folder exists
                 created = true;
             }
@@ -110,58 +99,40 @@ namespace Dizzle.Cqrs.Universal.Storage
             if (!created)
             {
                 //create it
-                folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(buck);
+                folder = ApplicationData.Current.LocalFolder.CreateFolderAsync(buck).AsTask().Result;
             }
             foreach (var pair in records)
             {
                 var recordPath = Path.Combine(buck, pair.Key);
-                //bool createdRecord = false;
-                //try
-                //{
-                //    folder = await ApplicationData.Current.LocalFolder.GetFolderAsync(recordPath);
-                //    //no exception means folder exists
-                //    createdRecord = true;
-                //}
-                //catch (FileNotFoundException ex) { }
-                if (!await File.Exists(recordPath))
+                
+                if (!File.Exists(recordPath))
                 {
                     //create it
-                    folder = await ApplicationData.Current.LocalFolder.CreateFolderAsync(recordPath);
+                    folder = ApplicationData.Current.LocalFolder.CreateFolderAsync(recordPath).AsTask().Result;
                 }
                 //write bytes to file
-                StorageFile file = await Windows.Storage.ApplicationData.Current.LocalFolder.CreateFileAsync(recordPath, CreationCollisionOption.ReplaceExisting);
-                using (var stream = await file.OpenStreamForWriteAsync())
+                StorageFile file = Windows.Storage.ApplicationData.Current.LocalFolder.CreateFileAsync(recordPath, CreationCollisionOption.ReplaceExisting).AsTask().Result;
+                using (var stream = file.OpenStreamForWriteAsync().AsAsyncOperation().AsTask().Result)
                 {
                     byte[] fileBytes = pair.Read();
                     stream.Write(fileBytes, 0, fileBytes.Length);
                 }
             }
-            //foreach (var pair in records)
-            //{
-            //    var recordPath = Path.Combine(buck, pair.Key);
-
-            //    var path = Path.GetDirectoryName(recordPath) ?? "";
-            //    if (!Directory.Exists(path))
-            //    {
-            //        Directory.CreateDirectory(path);
-            //    }
-            //    File.WriteAllBytes(recordPath, pair.Read());
-            //}
         }
 
-        public async void ResetAll()
+        public void ResetAll()
         {
-            if (await Directory.Exists(_folderPath))
-                await Directory.Delete(_folderPath, true);
-            await Directory.CreateDirectory(_folderPath);
+            if (Directory.Exists(_folderPath))
+                Directory.Delete(_folderPath, true);
+            Directory.CreateDirectory(_folderPath);
         }
 
-        public async void Reset(string bucket)
+        public void Reset(string bucket)
         {
             var path = Path.Combine(_folderPath, bucket);
-            if (await Directory.Exists(path))
-                await Directory.Delete(path, true);
-            await Directory.CreateDirectory(path);
+            if (Directory.Exists(path))
+                Directory.Delete(path, true);
+            Directory.CreateDirectory(path);
         }
     }
 }

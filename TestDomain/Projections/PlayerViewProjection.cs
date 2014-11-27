@@ -11,7 +11,7 @@ using Dizzle.Cqrs.Portable.Storage;
 
 namespace TestDomain.Projections
 {
-    public sealed class PlayerViewProjection : AbstractBaseProjection,
+    public class PlayerViewProjection : AbstractBaseProjection,
         IApplyEvent<PlayerCreated>,
         IApplyEvent<PlayerUpdated>
     {

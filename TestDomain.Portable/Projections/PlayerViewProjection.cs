@@ -11,7 +11,7 @@ using Dizzle.Cqrs.Portable.Storage;
 
 namespace TestDomain.Projections
 {
-    public sealed class PlayerViewProjection : AbstractBaseProjection,
+    public class PlayerViewProjection : AbstractBaseProjection,
         IApplyEvent<PlayerCreated>,
         IApplyEvent<PlayerUpdated>
     {
@@ -26,14 +26,18 @@ namespace TestDomain.Projections
             _writer = writer;
         }
 
+        /// <summary>
+        /// Used only for unit tests
+        /// </summary>
+        /// <param name="writer"></param>
         public void SetWriter(IDocumentWriter<PlayerId, PlayerView> writer)
         {
             _writer = writer;
         }
 
-        public async void Apply(PlayerCreated e)
+        public void Apply(PlayerCreated e)
         {
-            await _writer.Add(e.Id, new PlayerView
+            _writer.Add(e.Id, new PlayerView
             {
                 Id = e.Id,
                 FirstName = e.FirstName,
@@ -42,9 +46,9 @@ namespace TestDomain.Projections
             
         }
 
-        public async void Apply(PlayerUpdated e)
+        public void Apply(PlayerUpdated e)
         {
-            await _writer.UpdateOrThrow(e.Id, pv =>
+            _writer.UpdateOrThrow(e.Id, pv =>
             {
                 pv.Id = e.Id;
                 pv.FirstName = e.FirstName;

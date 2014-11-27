@@ -54,12 +54,12 @@ namespace Dizzle.Cqrs.Windows.Storage
             }
         }
 
-        string GetName(TKey key)
+        private string GetName(TKey key)
         {
             return Path.Combine(_folder, _strategy.GetEntityLocation<TEntity>(key));
         }
 
-        public async Task<TEntity> AddOrUpdate(TKey key, Func<TEntity> addFactory, Func<TEntity, TEntity> update,
+        public TEntity AddOrUpdate(TKey key, Func<TEntity> addFactory, Func<TEntity, TEntity> update,
             AddOrUpdateHint hint)
         {
             var name = GetName(key);
@@ -124,7 +124,7 @@ namespace Dizzle.Cqrs.Windows.Storage
             }
         }
 
-        public async Task<bool> TryDelete(TKey key)
+        public bool TryDelete(TKey key)
         {
             var name = GetName(key);
             if (File.Exists(name))

@@ -24,9 +24,7 @@ namespace Dizzle.Cqrs.Windows.Storage
             return new Uri(Path.GetFullPath(_folderPath)).AbsolutePath;
         }
 
-
         readonly HashSet<Tuple<Type, Type>> _initialized = new HashSet<Tuple<Type, Type>>();
-
 
         public IDocumentWriter<TKey, TEntity> GetWriter<TKey, TEntity>()
         {
@@ -49,7 +47,7 @@ namespace Dizzle.Cqrs.Windows.Storage
         }
 
 
-        public async Task<List<DocumentRecord>> EnumerateContents(string bucket)
+        public List<DocumentRecord> EnumerateContents(string bucket)
         {
             List<DocumentRecord> contents = new List<DocumentRecord>();
             var full = Path.Combine(_folderPath, bucket);
@@ -91,6 +89,7 @@ namespace Dizzle.Cqrs.Windows.Storage
                 Directory.Delete(_folderPath, true);
             Directory.CreateDirectory(_folderPath);
         }
+
         public void Reset(string bucket)
         {
             var path = Path.Combine(_folderPath, bucket);

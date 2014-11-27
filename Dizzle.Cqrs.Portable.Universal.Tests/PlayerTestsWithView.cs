@@ -1,7 +1,6 @@
 ﻿using Dizzle.Cqrs.Portable;
 using Dizzle.Cqrs.Portable.Universal.Tests;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-//using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace TestDomain.Portable.Tests
         }
 
         [TestMethod]
-        public void Can_Create_New_Player()
+        public void Universal_Can_Create_New_Player()
         {
             Test<PlayerId, PlayerView>(
                 Given(new List<IEvent>()),
@@ -33,6 +32,18 @@ namespace TestDomain.Portable.Tests
                 Then(new PlayerCreated(testId, "FirstName", "LastName")),
                 testId,
                 new PlayerView { Id = testId, FirstName = "FirstName", LastName = "LastName" }
+                );
+        }
+
+        [TestMethod]
+        public void Universal_Can_Update_New_Player()
+        {
+            Test<PlayerId, PlayerView>(
+                Given(new List<IEvent>(){new PlayerCreated(testId, "FirstName", "LastName")}),
+                When(new UpdatePlayer(testId, "FirstName2", "LastName2")),
+                Then(new PlayerUpdated(testId, "FirstName2", "LastName2")),
+                testId,
+                new PlayerView { Id = testId, FirstName = "FirstName2", LastName = "LastName2" }
                 );
         }
     }

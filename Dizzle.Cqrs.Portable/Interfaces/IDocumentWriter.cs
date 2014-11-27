@@ -20,7 +20,7 @@ namespace Dizzle.Cqrs.Portable
     /// <typeparam name="TKey">type of the key</typeparam>
     public interface IDocumentWriter<in TKey, TEntity>
     {
-        Task<TEntity> AddOrUpdate(TKey key, Func<TEntity> addFactory, Func<TEntity, TEntity> update, AddOrUpdateHint hint = AddOrUpdateHint.ProbablyExists);
-        Task<bool> TryDelete(TKey key);
+        TEntity AddOrUpdate(TKey key, Func<TEntity> addFactory, Func<TEntity, TEntity> update, AddOrUpdateHint hint = AddOrUpdateHint.ProbablyExists);
+        bool TryDelete(TKey key);
     }
 }

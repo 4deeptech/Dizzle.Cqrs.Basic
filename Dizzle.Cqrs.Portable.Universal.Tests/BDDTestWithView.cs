@@ -36,7 +36,6 @@ namespace Dizzle.Cqrs.Portable.Universal.Tests
             //ConcurrentDictionary<string, ConcurrentDictionary<string, byte[]>> _store = new ConcurrentDictionary<string,ConcurrentDictionary<string,byte[]>>();
             //_docStore = new MemoryDocumentStore(_store, new ViewStrategy());
             string path = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
-            //string testPath = Path.Combine(new string[]{Windows.Storage.ApplicationData.Current.LocalFolder.Name,"tscore"});
             string testPath = "tscore";
             _docStore = new IsolatedStorageDocumentStore(testPath, new ViewStrategy());
             //scan for ViewProjection handlers
@@ -52,9 +51,7 @@ namespace Dizzle.Cqrs.Portable.Universal.Tests
             var projections =
                 from t in ass.DefinedTypes
                 where t.BaseType.Name.Equals("AbstractBaseProjection")
-                //where i.GetGenericTypeDefinition() == typeof(IApplyEvent<>)
                 select t;
-                //select i.GenericTypeArguments[0];
             foreach (var typ in projections)
             {
                 var instance = CreateInstanceOf(typ.AsType());
@@ -114,6 +111,11 @@ namespace Dizzle.Cqrs.Portable.Universal.Tests
 
         protected IEnumerable<IEvent> Given(List<IEvent> events)
         {
+            //run init events to the view projections
+            foreach (IEvent e in events)
+            {
+                ExecuteProjectionEventHandlers(e);
+            }
             return events as IEnumerable<IEvent>;
         }
 

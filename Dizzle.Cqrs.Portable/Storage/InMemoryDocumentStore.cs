@@ -56,7 +56,7 @@ namespace Dizzle.Cqrs.Portable.Storage
             get { return _strategy; }
         }
 
-        public async Task<List<DocumentRecord>> EnumerateContents(string bucket)
+        public List<DocumentRecord> EnumerateContents(string bucket)
         {
             var store = _store.GetOrAdd(bucket, s => new ConcurrentDictionary<string, byte[]>());
             return store.Select(p => new DocumentRecord(p.Key, () => p.Value)).ToList();
