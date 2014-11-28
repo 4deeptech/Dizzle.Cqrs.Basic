@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<aggregateModel xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="6d3bc1b4-f1c6-41be-8f66-3fb100ad64f3" modelNamespace="TestDomain.Cqrs" xmlns="http://schemas.microsoft.com/dsltools/PDizzle">
+  <aggregateRoot>
+    <aggregateRoot Id="4546483a-6bf0-4b40-babf-a806fa845fca" name="TennisEvent" description="A tennis event to associate with matches">
+      <properties>
+        <aggregateRootHasProperties Id="7245e0b9-88cd-415a-801f-01155c0b83b7">
+          <property Id="3509dab4-cb28-4712-b940-beff35e08123" order="1" name="Id" type="TennisEventId" description="The id for the event" />
+        </aggregateRootHasProperties>
+        <aggregateRootHasProperties Id="5f68bd81-65b0-4934-ab12-f5941fd60703">
+          <property Id="dc8409c9-558f-4ec4-a4f9-27e26a06683c" order="2" name="USTAEventId" type="String" description="If a USTA event is represented" />
+        </aggregateRootHasProperties>
+        <aggregateRootHasProperties Id="c6803d7e-57b7-4a1d-9724-e60ed81d8f21">
+          <property Id="f1233749-4afa-4bc6-b53c-c2fbf49282d0" order="3" name="StartDate" type="DateTime?" description="The date the event starts" />
+        </aggregateRootHasProperties>
+        <aggregateRootHasProperties Id="4c06f8fd-e57e-401f-91ce-b027525176e2">
+          <property Id="4efbcb8b-a30d-4732-afa2-ce73e2d9d10b" order="4" name="EndDate" type="DateTime?" description="The date the event ends" />
+        </aggregateRootHasProperties>
+        <aggregateRootHasProperties Id="2c7a3e4b-df58-4a53-9ea0-51588fb57f65">
+          <property Id="96ea8f37-a37d-4954-afeb-28d66b6db56e" order="5" name="Name" type="String" description="The name of the event" />
+        </aggregateRootHasProperties>
+      </properties>
+      <domainCommands>
+        <aggregateRootReferencesDomainCommands Id="8c47efc2-ffbd-4b03-9fb9-71e23db483ba">
+          <domainCommandMoniker name="/6d3bc1b4-f1c6-41be-8f66-3fb100ad64f3/CreateTennisEvent" />
+        </aggregateRootReferencesDomainCommands>
+        <aggregateRootReferencesDomainCommands Id="a30eb838-313d-45b7-b18f-a216f483ec90">
+          <domainCommandMoniker name="/6d3bc1b4-f1c6-41be-8f66-3fb100ad64f3/UpdateTennisEvent" />
+        </aggregateRootReferencesDomainCommands>
+      </domainCommands>
+      <domainEvents>
+        <aggregateRootReferencesDomainEvents Id="f9ac8563-9e45-4280-a5bb-4457e6c29ca2">
+          <domainEventMoniker Id="4c0da642-24c9-4e8e-a951-1c4fe3ee3dcf" />
+        </aggregateRootReferencesDomainEvents>
+        <aggregateRootReferencesDomainEvents Id="ac107f7d-c923-4caf-bdd8-3c9bd8245fb7">
+          <domainEventMoniker Id="1a3d8f2d-9596-4dc8-a17c-572e5ab2ab09" />
+        </aggregateRootReferencesDomainEvents>
+      </domainEvents>
+    </aggregateRoot>
+  </aggregateRoot>
+  <domainCommands>
+    <aggregateModelHasDomainCommands Id="d287a15a-d596-48bb-b402-e574e5c80af7">
+      <domainCommand Id="81038231-a360-403b-87fe-fb845c3000fb" name="CreateTennisEvent" description="Create a new event to associate with a match or set of matches">
+        <properties>
+          <domainCommandHasProperties Id="1f1b693b-8a09-4510-a33a-1117f976f422">
+            <property Id="83d0c85f-f29f-4ea7-95b9-847703264e92" order="1" name="Id" type="TennisEventId" description="The id for the event" />
+          </domainCommandHasProperties>
+          <domainCommandHasProperties Id="bddcd2cd-af66-422a-98b8-328a2853f44f">
+            <property Id="8658e6d1-7f93-4325-bd50-14d76c6e33ac" order="2" name="USTAEventId" type="String" description="If a USTA event is represented" />
+          </domainCommandHasProperties>
+          <domainCommandHasProperties Id="07241b5a-8771-48a6-8f78-712161ce62ae">
+            <property Id="0003b6bd-e69d-4770-934c-cadaac594230" order="3" name="StartDate" type="DateTime?" description="The date the event starts" />
+          </domainCommandHasProperties>
+          <domainCommandHasProperties Id="38f62fbf-050d-4bce-9cdc-7f23f8c23e98">
+            <property Id="1f7900a2-e23f-4f0f-afc5-a67d863885d2" order="4" name="EndDate" type="DateTime?" description="The date the event ends" />
+          </domainCommandHasProperties>
+          <domainCommandHasProperties Id="a2a7ce87-0858-4135-a717-cb9acbb410f1">
+            <property Id="3adc04f0-4d6e-4945-963b-9e3e6f6c332a" order="5" name="Name" type="String" description="The name of the event" />
+          </domainCommandHasProperties>
+        </properties>
+      </domainCommand>
+    </aggregateModelHasDomainCommands>
+    <aggregateModelHasDomainCommands Id="870dc6cf-ae41-4648-8dd9-13bd11f389df">
+      <domainCommand Id="5366723b-5008-44e7-8a69-96d29d7cb4cd" name="UpdateTennisEvent" description="Update a tennis event">
+        <properties>
+          <domainCommandHasProperties Id="c231bc73-dac2-48c5-ad2b-4ee09bc475fb">
+            <property Id="f5521f11-a2c9-43e1-87c8-d0001ea630f7" order="1" name="Id" type="TennisEventId" description="The id for the event" />
+          </domainCommandHasProperties>
+          <domainCommandHasProperties Id="90fcd40f-a55a-4cf9-b2f6-ded7f20e080f">
+            <property Id="6dc55f22-f12c-479a-adbf-f40b46f91125" order="2" name="USTAEventId" type="String" description="If a USTA event is represented" />
+          </domainCommandHasProperties>
+          <domainCommandHasProperties Id="b4637639-c3a3-4f36-868b-3febf04ca179">
+            <property Id="8d6c31db-f79d-4747-ae39-44d93ba78ab0" order="3" name="StartDate" type="DateTime?" description="The date the event starts" />
+          </domainCommandHasProperties>
+          <domainCommandHasProperties Id="c48a1e7d-9cc3-46f8-936b-2fd50829c6b6">
+            <property Id="fc05db5b-4eb6-44f2-b391-a60dcc04c4b7" order="4" name="EndDate" type="DateTime?" description="The date the event ends" />
+          </domainCommandHasProperties>
+          <domainCommandHasProperties Id="8cf73e8f-ee0c-44a4-93f2-d00ff1363bea">
+            <property Id="d7ff7736-674c-4827-8b24-623c10d4656c" order="5" name="Name" type="String" description="The name of the event" />
+          </domainCommandHasProperties>
+        </properties>
+      </domainCommand>
+    </aggregateModelHasDomainCommands>
+  </domainCommands>
+  <views>
+    <aggregateModelHasViews Id="8ae1400f-2dbe-4309-b59d-7a9f758d9999">
+      <view Id="77b5eb37-7806-4b46-8c7d-06ecbd028ea3" name="TennisEventView" description="The view for a given event">
+        <properties>
+          <viewHasProperties Id="51cfb27f-a858-4134-955b-0381d3d3ec3c">
+            <property Id="3579edab-beb4-470b-9950-05365ada9dd4" order="1" name="Id" type="TennisEventId" description="The id for the event" />
+          </viewHasProperties>
+          <viewHasProperties Id="c5834d65-ca0d-4c6c-9507-9a20873bfb4e">
+            <property Id="3266a184-b2ee-4b1e-be3c-802d5fd60f39" order="2" name="USTAEventId" type="String" description="If a USTA event is represented" />
+          </viewHasProperties>
+          <viewHasProperties Id="a86ab804-08e9-4477-82a0-f4759010b6c9">
+            <property Id="fd845454-14b4-40ff-a566-c0d7f076ddcc" order="3" name="StartDate" type="DateTime?" description="The date the event starts" />
+          </viewHasProperties>
+          <viewHasProperties Id="5a06bc27-1f9e-4d77-8bad-9c30d2ac9bb6">
+            <property Id="98543b8e-599f-4130-a133-77d302072ca8" order="4" name="EndDate" type="DateTime?" description="The date the event ends" />
+          </viewHasProperties>
+          <viewHasProperties Id="440fcd8d-8ba4-4383-b815-7dad814e074a">
+            <property Id="4b1d1b14-31e1-4257-87bf-8e4219f681eb" order="5" name="Name" type="String" description="The name of the event" />
+          </viewHasProperties>
+        </properties>
+        <domainEvents>
+          <viewHandlesDomainEvents Id="52cf939f-eac4-4665-a180-7e1aea4c773d">
+            <domainEvent Id="4b63964b-ebf8-4fd0-b8f3-97a8460bf636" name="TennisEventCreated" />
+          </viewHandlesDomainEvents>
+        </domainEvents>
+      </view>
+    </aggregateModelHasViews>
+  </views>
+  <domainEvented>
+    <aggregateModelHandlesDomainEvents Id="8bbd4ae2-ab8d-44c8-9e9f-e5b28fd6f60d">
+      <domainEvent Id="4c0da642-24c9-4e8e-a951-1c4fe3ee3dcf" name="TennisEventCreated" description="A tennis event was created">
+        <properties>
+          <domainEventHasProperties Id="36f1e3fe-0726-41a9-9dc4-5a45c08677db">
+            <property Id="66a9d9cf-82f1-4869-a794-b2f647749884" order="1" name="Id" type="TennisEventId" description="The id for the event" />
+          </domainEventHasProperties>
+          <domainEventHasProperties Id="3915e29c-f34f-42ff-a6e2-d93d5ad4c463">
+            <property Id="68eea592-d3a1-4278-98e2-2f397317caf2" order="2" name="USTAEventId" type="String" description="If a USTA event is represented" />
+          </domainEventHasProperties>
+          <domainEventHasProperties Id="1fb21816-023f-4408-9d6d-c55b3cc02b1f">
+            <property Id="7e8d1da7-7f1e-464e-88f6-a7c5c5c0ca39" order="3" name="StartDate" type="DateTime?" description="The date the event starts" />
+          </domainEventHasProperties>
+          <domainEventHasProperties Id="c5b39136-9464-42bf-bad8-f14318f2668b">
+            <property Id="92fed068-c789-438f-b222-0707527a516e" order="4" name="EndDate" type="DateTime?" description="The date the event ends" />
+          </domainEventHasProperties>
+          <domainEventHasProperties Id="ab113a78-928e-4e6a-8923-04087b9d1f8d">
+            <property Id="a6cec518-3fac-48dc-8eab-57ef467bb449" order="5" name="Name" type="String" description="The name of the event" />
+          </domainEventHasProperties>
+        </properties>
+      </domainEvent>
+    </aggregateModelHandlesDomainEvents>
+    <aggregateModelHandlesDomainEvents Id="dcca27c2-75ca-4323-9a1b-9f1a54153ec4">
+      <domainEvent Id="1a3d8f2d-9596-4dc8-a17c-572e5ab2ab09" name="TennisEventUpdated">
+        <properties>
+          <domainEventHasProperties Id="dacbb375-6d9c-4fcf-92de-f49af1a53223">
+            <property Id="5e17a0e0-8683-43ac-a217-a940b6e8d7df" order="1" name="Id" type="TennisEventId" description="The id for the event" />
+          </domainEventHasProperties>
+          <domainEventHasProperties Id="d4f1d55a-1fab-4d6f-8801-584ea743c481">
+            <property Id="540500c7-aaba-466d-832e-80270ca65112" order="2" name="USTAEventId" type="String" description="If a USTA event is represented" />
+          </domainEventHasProperties>
+          <domainEventHasProperties Id="db292b29-6d87-4175-a2f2-7ba99fea86b4">
+            <property Id="c2e70f85-5836-44b1-aa0d-ae09f76f5dca" order="3" name="StartDate" type="DateTime?" description="The date the event starts" />
+          </domainEventHasProperties>
+          <domainEventHasProperties Id="7a8c2152-853f-4a8b-b396-e945575dee0f">
+            <property Id="5b5ef142-d1d8-4204-b3c1-759972f24ac7" order="4" name="EndDate" type="DateTime?" description="The date the event ends" />
+          </domainEventHasProperties>
+          <domainEventHasProperties Id="b01c27ec-ae17-4c9f-9201-b7ddfa55124f">
+            <property Id="bb4fd48f-316a-404a-a848-60d7323ac1b5" order="5" name="Name" type="String" description="The name of the event" />
+          </domainEventHasProperties>
+        </properties>
+      </domainEvent>
+    </aggregateModelHandlesDomainEvents>
+  </domainEvented>
+</aggregateModel>

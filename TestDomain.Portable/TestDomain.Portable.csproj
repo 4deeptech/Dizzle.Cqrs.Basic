@@ -76,9 +76,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dizzle.Cqrs.Portable\Dizzle.Cqrs.Portable.csproj">
-      <Project>{63d363e2-49a3-434b-99ea-2c04fde9280f}</Project>
-      <Name>Dizzle.Cqrs.Portable</Name>
+    <ProjectReference Include="..\Dizzle.Cqrs.Portable.Universal\Dizzle.Cqrs.Portable.Universal.csproj">
+      <Project>{34564cb6-c527-449a-b5e7-18900d84cd7b}</Project>
+      <Name>Dizzle.Cqrs.Portable.Universal</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

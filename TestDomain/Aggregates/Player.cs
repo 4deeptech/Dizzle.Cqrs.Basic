@@ -4,37 +4,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TestDomain.Aggregates;
-using TestDomain.Commands;
-using TestDomain.Events;
+using TestDomain.Cqrs.Commands;
+using TestDomain.Cqrs.Events;
 
-namespace TestDomain.Aggregates
+
+namespace TestDomain.Cqrs.Model
 {
-    public class Player : Aggregate, 
-        IHandleCommand<CreatePlayer>,
-        IHandleCommand<UpdatePlayer>,
-        IApplyEvent<PlayerCreated>,
-        IApplyEvent<PlayerUpdated>
+    public partial class Player 
     {
-        public new PlayerId Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-
-        public Player()
-        {
-        }
-
-
-
         public IEnumerable<IEvent> Handle(CreatePlayer c)
         {
-            yield return new PlayerCreated(c.Id,c.FirstName,c.LastName);
+            yield return new PlayerCreated(c.Id,c.FirstName,c.LastName, null);
             
         }
 
         public IEnumerable<IEvent> Handle(UpdatePlayer c)
         {
-            yield return new PlayerUpdated(c.Id, c.FirstName, c.LastName);
+            yield return new PlayerUpdated(c.Id, c.FirstName, c.LastName, null);
         }
 
         public void Apply(PlayerCreated e)

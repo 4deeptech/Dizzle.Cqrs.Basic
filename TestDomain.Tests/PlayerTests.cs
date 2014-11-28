@@ -5,9 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TestDomain.Aggregates;
-using TestDomain.Commands;
-using TestDomain.Events;
+using TestDomain.Cqrs.Commands;
+using TestDomain.Cqrs.Events;
+using TestDomain.Cqrs.Model;
 
 namespace TestDomain.Tests
 {
@@ -26,8 +26,8 @@ namespace TestDomain.Tests
         {
             Test(
                 Given(new List<IEvent>()),
-                When(new CreatePlayer(testId,"FirstName","LastName")),
-                Then(new PlayerCreated ( testId, "FirstName", "LastName" ))
+                When(new CreatePlayer(testId,"FirstName","LastName",null)),
+                Then(new PlayerCreated(testId, "FirstName", "LastName", null))
                 );
         }
 
@@ -35,9 +35,16 @@ namespace TestDomain.Tests
         public void Can_Update_New_Player()
         {
             Test(
-                Given(new List<IEvent> { new PlayerCreated(testId, "FirstName", "LastName"), new PlayerUpdated(testId, "FirstName2", "LastName2"), new PlayerUpdated(testId, "FirstName3", "LastName3") }),
-                When(new UpdatePlayer(testId, "FirstName4", "LastName4")),
-                Then(new PlayerUpdated(testId, "FirstName4", "LastName4"))
+                Given(new List<IEvent> { 
+
+                    new PlayerCreated(testId, "FirstName", "LastName", null),
+                    new PlayerUpdated(testId, "FirstName2", "LastName2", null), 
+                    new PlayerUpdated(testId, "FirstName3", "LastName3", null) }),
+
+                When(new UpdatePlayer(testId, "FirstName4", "LastName4", null)),
+
+                Then(new PlayerUpdated(testId, "FirstName4", "LastName4", null))
+
                 );
         }
     }

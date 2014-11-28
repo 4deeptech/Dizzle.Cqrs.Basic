@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TestDomain.Aggregates;
-using TestDomain.Events;
-using TestDomain.Views;
 using Dizzle.Cqrs.Portable.Storage;
+using TestDomain.Cqrs.Events;
+using TestDomain.Cqrs.Model;
+using TestDomain.Cqrs.Views;
 
 namespace TestDomain.Projections
 {

@@ -40,15 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aggregates\TennisEvent.cs" />
     <Compile Include="Aggregates\Player.cs" />
-    <Compile Include="Aggregates\PlayerId.cs" />
-    <Compile Include="Commands\CreatePlayer.cs" />
-    <Compile Include="Commands\UpdatePlayer.cs" />
-    <Compile Include="Events\PlayerCreated.cs" />
-    <Compile Include="Events\PlayerUpdated.cs" />
+    <Compile Include="Aggregates\Player.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Player.pdizzle</DependentUpon>
+    </Compile>
     <Compile Include="Projections\PlayerViewProjection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Views\PlayerView.cs" />
+    <Compile Include="Aggregates\TennisEvent.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TennisEvent.pdizzle</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dizzle.Cqrs.Portable\Dizzle.Cqrs.Portable.csproj">
@@ -56,7 +61,26 @@
       <Name>Dizzle.Cqrs.Portable</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Aggregates\AggregateRootCoreTemplate.t4" />
+    <None Include="Aggregates\Player.pdizzle">
+      <Generator>PDizzleFileCodeGenerator</Generator>
+      <LastGenOutput>Player.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Aggregates\Player.pdizzle.diagram">
+      <DependentUpon>Player.pdizzle</DependentUpon>
+    </None>
+    <None Include="Aggregates\TennisEvent.pdizzle">
+      <Generator>PDizzleFileCodeGenerator</Generator>
+      <LastGenOutput>TennisEvent.generated.cs</LastGenOutput>
+    </None>
+    <None Include="Aggregates\TennisEvent.pdizzle.diagram">
+      <DependentUpon>TennisEvent.pdizzle</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

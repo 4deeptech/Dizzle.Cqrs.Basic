@@ -45,10 +45,42 @@
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractIdentity.cs" />
+    <Compile Include="Aggregate.cs" />
+    <Compile Include="Conventions.cs" />
     <Compile Include="Directory.cs" />
+    <Compile Include="Interfaces\BaseProjection.cs" />
+    <Compile Include="Interfaces\IAggregate.cs" />
+    <Compile Include="Interfaces\IApplyEvent.cs" />
+    <Compile Include="Interfaces\IDocumentReader.cs" />
+    <Compile Include="Interfaces\IDocumentStore.cs" />
+    <Compile Include="Interfaces\IDocumentStrategy.cs" />
+    <Compile Include="Interfaces\IDocumentWriter.cs" />
+    <Compile Include="Interfaces\IEvent.cs" />
+    <Compile Include="Interfaces\IEventStore.cs" />
+    <Compile Include="Interfaces\IHandleCommand.cs" />
+    <Compile Include="Interfaces\IIdentity.cs" />
+    <Compile Include="Interfaces\IProjection.cs" />
+    <Compile Include="Interfaces\ISubscribeTo.cs" />
+    <Compile Include="Interfaces\IView.cs" />
     <Compile Include="IsolatedStorageDocumentReaderWriter.cs" />
     <Compile Include="IsolatedStorageDocumentStore.cs" />
+    <Compile Include="MessageDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Storage\DocumentStrategy.cs" />
+    <Compile Include="Storage\ExtendDocumentWriter.cs" />
+    <Compile Include="Storage\InMemoryDocumentStore.cs" />
+    <Compile Include="Storage\InMemoryEventStore.cs" />
+    <Compile Include="Storage\MemoryDocumentReaderWriter.cs" />
+    <Compile Include="Unit.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.6\lib\portable-net40+sl5+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

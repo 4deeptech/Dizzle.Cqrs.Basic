@@ -4,10 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TestDomain.Aggregates;
-using TestDomain.Commands;
-using TestDomain.Events;
-using TestDomain.Views;
+using TestDomain.Cqrs.Commands;
+using TestDomain.Cqrs.Events;
+using TestDomain.Cqrs.Model;
+using TestDomain.Cqrs.Views;
 
 namespace TestDomain.Tests
 {
@@ -26,8 +26,8 @@ namespace TestDomain.Tests
         {
             Test<PlayerId, PlayerView>(
                 Given(new List<IEvent>()),
-                When(new CreatePlayer(testId, "FirstName", "LastName")),
-                Then(new PlayerCreated(testId, "FirstName", "LastName")),
+                When(new CreatePlayer(testId, "FirstName", "LastName",null)),
+                Then(new PlayerCreated(testId, "FirstName", "LastName",null)),
                 testId,
                 new PlayerView { Id = testId, FirstName = "FirstName", LastName = "LastName" }
                 );
