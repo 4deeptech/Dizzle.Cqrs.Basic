@@ -14,6 +14,8 @@ using Newtonsoft.Json.Converters;
 using Dizzle.Cqrs.Portable.Storage;
 using System.Collections.Concurrent;
 using Dizzle.Cqrs.Universal.Storage;
+using Dizzle.Cqrs.Portable.Storage.SQLite;
+using SQLite.Net.Platform.WinRT;
 
 namespace Dizzle.Cqrs.Portable.Universal.Tests
 {
@@ -36,10 +38,12 @@ namespace Dizzle.Cqrs.Portable.Universal.Tests
             //ConcurrentDictionary<string, ConcurrentDictionary<string, byte[]>> _store = new ConcurrentDictionary<string,ConcurrentDictionary<string,byte[]>>();
             //_docStore = new MemoryDocumentStore(_store, new ViewStrategy());
             string path = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
-            string testPath = "tscore";
-            _docStore = new IsolatedStorageDocumentStore(testPath, new ViewStrategy());
+            string testPath = "tscore.sqlite";
+            //_docStore = new IsolatedStorageDocumentStore(testPath, new ViewStrategy());
+            StorageFile storageFile = ApplicationData.Current.LocalFolder.CreateFileAsync(testPath, CreationCollisionOption.OpenIfExists).AsTask().Result;
+            _docStore = new SQLiteDocumentStore(storageFile.Path, new SQLitePlatformWinRT(), new ViewStrategy());
             //scan for ViewProjection handlers
-            _docStore.ResetAll();
+            //_docStore.ResetAll();
             AssemblyName name = new AssemblyName("TestDomain.Portable, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null");
             System.Reflection.Assembly asm = System.Reflection.Assembly.Load(name);
             ScanForProjections(asm);
