@@ -34,13 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\Dizzle.Cqrs.Portable\Dizzle.Cqrs.Portable.csproj">
-      <Project>{63d363e2-49a3-434b-99ea-2c04fde9280f}</Project>
-      <Name>Dizzle.Cqrs.Portable</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <TargetPlatform Include="WindowsPhoneApp, Version=8.1" />
     <TargetPlatform Include="Windows, Version=8.1" />
   </ItemGroup>
@@ -63,8 +56,10 @@
     <Compile Include="Interfaces\IProjection.cs" />
     <Compile Include="Interfaces\ISubscribeTo.cs" />
     <Compile Include="Interfaces\IView.cs" />
-    <Compile Include="IsolatedStorageDocumentReaderWriter.cs" />
-    <Compile Include="IsolatedStorageDocumentStore.cs" />
+    <Compile Include="Storage\EventStorageStrategy.cs" />
+    <Compile Include="Storage\SQLiteEventStore.cs" />
+    <Compile Include="Storage\IsolatedStorageDocumentReaderWriter.cs" />
+    <Compile Include="Storage\IsolatedStorageDocumentStore.cs" />
     <Compile Include="MessageDispatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage\DocumentStrategy.cs" />

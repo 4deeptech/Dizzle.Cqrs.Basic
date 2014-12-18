@@ -9,6 +9,7 @@ namespace Dizzle.Cqrs.Portable
     public interface IEventStore
     {
         IEnumerable<IEvent> LoadEventsFor<TAggregate>(string streamName);
-        void SaveEventsFor<TAggregate>(string streamName, int eventsLoaded, IEnumerable<IEvent> newEvents);
+        IEnumerable<IEvent> LoadEventsFor<TAggregate>(string streamName, long afterVersion);
+        void SaveEventsFor<TAggregate>(string streamName, long eventsLoaded, IEnumerable<IEvent> newEvents);
     }
 }

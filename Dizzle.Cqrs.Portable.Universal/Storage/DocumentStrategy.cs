@@ -97,7 +97,7 @@ namespace Dizzle.Cqrs.Portable.Storage
                 return hash;
             }
         }
-        public void Serialize<TEntity>(TEntity entity, Stream stream)
+        public void Serialize<TEntity>(TEntity entity, System.IO.Stream stream)
         {
             // ProtoBuf must have non-zero files
             stream.WriteByte(42);
@@ -110,7 +110,7 @@ namespace Dizzle.Cqrs.Portable.Storage
             jsonWriter.Flush();
         }
 
-        public TEntity Deserialize<TEntity>(Stream stream)
+        public TEntity Deserialize<TEntity>(System.IO.Stream stream)
         {
             var signature = stream.ReadByte();
 
@@ -126,7 +126,7 @@ namespace Dizzle.Cqrs.Portable.Storage
 
     public sealed class DocumentStrategy : IDocumentStrategy
     {
-        public void Serialize<TEntity>(TEntity entity, Stream stream)
+        public void Serialize<TEntity>(TEntity entity, System.IO.Stream stream)
         {
             // ProtoBuf must have non-zero files
             stream.WriteByte(42);
@@ -137,7 +137,7 @@ namespace Dizzle.Cqrs.Portable.Storage
             jsonWriter.Flush();
         }
 
-        public TEntity Deserialize<TEntity>(Stream stream)
+        public TEntity Deserialize<TEntity>(System.IO.Stream stream)
         {
             var signature = stream.ReadByte();
 
@@ -163,4 +163,6 @@ namespace Dizzle.Cqrs.Portable.Storage
             return key.ToString().ToLowerInvariant() + ".json";
         }
     }
+
+    
 }

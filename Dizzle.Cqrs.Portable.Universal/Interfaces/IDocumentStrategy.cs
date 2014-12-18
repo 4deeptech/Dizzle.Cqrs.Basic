@@ -13,13 +13,13 @@ namespace Dizzle.Cqrs.Portable
         string GetEntityLocation<TEntity>(object key);
 
 
-        void Serialize<TEntity>(TEntity entity, Stream stream);
-        TEntity Deserialize<TEntity>(Stream stream);
+        void Serialize<TEntity>(TEntity entity, System.IO.Stream stream);
+        TEntity Deserialize<TEntity>(System.IO.Stream stream);
     }
 
     public interface IDocumentSerializer
     {
-        void Serialize<TView>(TView view, Stream stream);
-        TView Deserialize<TView>(Stream stream);
+        void Serialize<TView>(TView view, System.IO.Stream stream);
+        TView Deserialize<TView>(System.IO.Stream stream);
     }
 }

@@ -38,7 +38,7 @@ namespace Dizzle.Cqrs.Portable.Universal.Tests
             //ConcurrentDictionary<string, ConcurrentDictionary<string, byte[]>> _store = new ConcurrentDictionary<string,ConcurrentDictionary<string,byte[]>>();
             //_docStore = new MemoryDocumentStore(_store, new ViewStrategy());
             string path = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
-            string testPath = "tscore.sqlite";
+            string testPath = "tscoreviews.sqlite";
             //_docStore = new IsolatedStorageDocumentStore(testPath, new ViewStrategy());
             StorageFile storageFile = ApplicationData.Current.LocalFolder.CreateFileAsync(testPath, CreationCollisionOption.OpenIfExists).AsTask().Result;
             _docStore = new SQLiteDocumentStore(storageFile.Path, new SQLitePlatformWinRT(), new ViewStrategy());

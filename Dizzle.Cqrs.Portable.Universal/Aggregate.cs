@@ -28,8 +28,6 @@ namespace Dizzle.Cqrs.Portable
         /// <param name="events"></param>
         public void ApplyEvents(IEnumerable<IEvent> events)
         {
-            //this is a slow way to go about this
-            //the method should be cached by type so you don't have to muck with reflection over and over
             foreach (var e in events)
             {
                 Type typ = e.GetType();

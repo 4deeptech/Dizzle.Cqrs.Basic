@@ -16,7 +16,7 @@ namespace Dizzle.Cqrs.Portable
         /// <summary>
         /// The number of events loaded into this aggregate.
         /// </summary>
-        public int EventsLoaded { get; private set; }
+        public long EventsLoaded { get; private set; }
 
         public static Dictionary<Type, MethodInfo> Cache = new Dictionary<Type, MethodInfo>();
 

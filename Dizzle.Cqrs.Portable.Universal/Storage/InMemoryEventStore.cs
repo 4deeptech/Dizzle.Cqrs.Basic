@@ -8,14 +8,30 @@ using System.Reflection;
 
 namespace Dizzle.Cqrs.Portable
 {
-    public class InMemoryEventStore : IEventStore
+    public class Stream
     {
-        private class Stream
+        public List<StorageFrame> Events;
+        public long Version { get; set; }
+    }
+
+    public sealed class StorageFrame
+    {
+        public List<IEvent> Events;
+        public long Version { get; set; }
+
+        public StorageFrame()
         {
-            public List<IEvent> Events;
-            public long Version { get; set; }
         }
 
+        public StorageFrame(IEnumerable<IEvent> events, long version)
+        {
+            Events = events.ToList();
+            Version = version;
+        }
+    }
+
+    public class InMemoryEventStore : IEventStore
+    {
         private ConcurrentDictionary<string, Stream> store =
             new ConcurrentDictionary<string, Stream>();
 
@@ -25,12 +41,23 @@ namespace Dizzle.Cqrs.Portable
             // Events array so it's safe to return the real thing.
             Stream s;
             if (store.TryGetValue(id, out s))
-                return s.Events;
+                return s.Events.OrderBy(t=>t.Version).SelectMany(t=>t.Events);
             else
                 return new List<IEvent>();
         }
 
-        public void SaveEventsFor<TAggregate>(string aggregateId, int eventsLoaded, IEnumerable<IEvent> newEvents)
+        public IEnumerable<IEvent> LoadEventsFor<TAggregate>(string id, long afterVersion)
+        {
+            // Get the current event stream; note that we never mutate the
+            // Events array so it's safe to return the real thing.
+            Stream s;
+            if (store.TryGetValue(id, out s))
+                return s.Events.Where(t=>t.Version > afterVersion).OrderBy(t=>t.Version).SelectMany(t=>t.Events);
+            else
+                return new List<IEvent>();
+        }
+
+        public void SaveEventsFor<TAggregate>(string aggregateId, long eventsLoaded, IEnumerable<IEvent> newEvents)
         {   
             // Get or create stream.
             var s = store.GetOrAdd(aggregateId, _ => new Stream());
@@ -42,16 +69,16 @@ namespace Dizzle.Cqrs.Portable
                 var eventList = s.Events;
 
                 // Ensure no events persisted since us.
-                var prevEvents = eventList == null ? 0 : eventList.Count;
+                var prevEvents = eventList == null ? 0 : eventList.Sum(t=>t.Events.Count);
                 if (prevEvents != eventsLoaded)
                     throw new Exception("Concurrency conflict; cannot persist these events");
 
                 // Create a new event list with existing ones plus our new
                 // ones (making new important for lock free algorithm!)
                 var newEventList = eventList == null
-                    ? new List<IEvent>()
-                    : (List<IEvent>)eventList.Clone();
-                newEventList.AddRange(newEvents);
+                    ? new List<StorageFrame>()
+                    : (List<StorageFrame>)eventList.Clone();
+                newEventList.Add(new StorageFrame(newEvents,eventsLoaded + 1L));
 
                 // Try to put the new event list in place atomically.
                 if (Interlocked.CompareExchange(ref s.Events, newEventList, eventList) == eventList)
@@ -66,8 +93,6 @@ namespace Dizzle.Cqrs.Portable
                 throw new Exception("Event type " + e.GetType().Name + " is missing an Id field");
             return (AbstractIdentity<Guid>)idField.GetValue(e);
         }
-
-        
     }
 
     public static class Extensions
@@ -75,6 +100,19 @@ namespace Dizzle.Cqrs.Portable
         public static List<IEvent> Clone(this List<IEvent> currentList)
         {
             List<IEvent> newList = new List<IEvent>();
+            newList.AddRange(currentList);
+            return newList;
+        }
+
+        public static List<StorageFrame> Clone(this List<StorageFrame> currentList)
+        {
+            List<StorageFrame> newList = new List<StorageFrame>();
+            foreach (StorageFrame frame in currentList)
+            {
+                StorageFrame frm = new StorageFrame();
+                frm.Version = frame.Version;
+                frm.Events = frame.Events.Clone();
+            }
             newList.AddRange(currentList);
             return newList;
         }

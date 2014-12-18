@@ -14,7 +14,6 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
     {
         readonly IDocumentStrategy _strategy;
         readonly MessageStore _store;
-        
 
         public SQLiteDocumentStore(string path,ISQLitePlatform platform,IDocumentStrategy strategy)
         {
@@ -25,15 +24,12 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
         public IDocumentWriter<TKey, TEntity> GetWriter<TKey, TEntity>()
         {
             var bucket = _strategy.GetEntityBucket<TEntity>();
-            //var store = _store.GetOrAdd(bucket, s => new ConcurrentDictionary<string, byte[]>());
             return new SQLiteDocumentReaderWriter<TKey, TEntity>(_strategy, _store);
         }
-
 
         public void WriteContents(string bucket, IEnumerable<DocumentRecord> records)
         {
             var pairs = records.Select(r => new KeyValuePair<string, byte[]>(r.Key, r.Read())).ToArray();
-            //_store[bucket] = new ConcurrentDictionary<string, byte[]>(pairs);
         }
 
         public void ResetAll()
@@ -46,11 +42,9 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
             _store.TryRemove(bucketNames);
         }
 
-
         public IDocumentReader<TKey, TEntity> GetReader<TKey, TEntity>()
         {
             var bucket = _strategy.GetEntityBucket<TEntity>();
-            //var store = _store.GetOrAdd(bucket, s => new ConcurrentDictionary<string, byte[]>());
             return new SQLiteDocumentReaderWriter<TKey, TEntity>(_strategy, _store);
         }
 
@@ -61,7 +55,6 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
 
         public List<DocumentRecord> EnumerateContents(string bucket)
         {
-            //var store = _store.GetOrAdd(bucket, s => new ConcurrentDictionary<string, byte[]>());
             byte[] buffer;
             _store.TryGetValue(bucket, out buffer);
             List<DocumentRecord> records = new List<DocumentRecord>();
@@ -69,6 +62,8 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
             return records;
         }
     }
+
+    #region SQLite Storage Class
 
     [Table("Documents")]
     public class Document
@@ -79,6 +74,10 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
         public string Bucket { get; set; }
         public DateTime DateLastModified { get; set; }
     }
+
+    #endregion
+
+    #region Abstraction
 
     public class MessageStore
     {
@@ -166,4 +165,5 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
         }
     }
 
+    #endregion
 }
