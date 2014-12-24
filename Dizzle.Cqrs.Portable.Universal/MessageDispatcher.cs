@@ -155,7 +155,7 @@ namespace Dizzle.Cqrs.Portable
                 this.GetType().GetTypeInfo().DeclaredMethods.Single(t => t.Name.Equals("AddSubscriberFor"))
                     .MakeGenericMethod(s.EventType)
                     .Invoke(this, new object[] { instance });
-                if (typ.GetTypeInfo().Name.Equals("AbstractBaseProjection"))
+                if (typ.GetTypeInfo().BaseType.Name.Equals("AbstractBaseProjection"))
                 {
                     //we have our instance of the projection
                     //now we need to call the GetWriter method on the doc store to get the defined writer for the type defined SetWriter call on the projection
