@@ -20,15 +20,18 @@ namespace Dizzle.Cqrs.Portable
         private Dictionary<Type, List<Action<object>>> eventSubscribers =
             new Dictionary<Type, List<Action<object>>>();
         private IEventStore eventStore;
+        private IDocumentStore docStore;
 
         /// <summary>
         /// Initializes a message dispatcher, which will use the specified event store
         /// implementation.
         /// </summary>
         /// <param name="es"></param>
-        public MessageDispatcher(IEventStore es)
+        /// /// <param name="viewStore"></param>
+        public MessageDispatcher(IEventStore es, IDocumentStore viewStore)
         {
             eventStore = es;
+            docStore = viewStore;
         }
 
         /// <summary>
@@ -146,9 +149,26 @@ namespace Dizzle.Cqrs.Portable
                     EventType = i.GenericTypeArguments[0]
                 };
             foreach (var s in subscriber)
-                this.GetType().GetTypeInfo().DeclaredMethods.Single(t=>t.Name.Equals("AddSubscriberFor"))
+            {
+                Type typ = s.Type.AsType();
+                object instance = CreateInstanceOf(typ);
+                this.GetType().GetTypeInfo().DeclaredMethods.Single(t => t.Name.Equals("AddSubscriberFor"))
                     .MakeGenericMethod(s.EventType)
-                    .Invoke(this, new object[] { CreateInstanceOf(s.Type.AsType()) });
+                    .Invoke(this, new object[] { instance });
+                if (typ.GetTypeInfo().Name.Equals("AbstractBaseProjection"))
+                {
+                    //we have our instance of the projection
+                    //now we need to call the GetWriter method on the doc store to get the defined writer for the type defined SetWriter call on the projection
+                    var m = docStore.GetType().GetTypeInfo().DeclaredMethods.Single(t => t.Name.Equals("GetWriter"));
+                    var x = m.GetGenericArguments();
+                    var m2 = instance.GetType().GetTypeInfo().DeclaredMethods.Single(t => t.Name.Equals("SetWriter"));
+                    var x2 = m2.GetParameters()[0].ParameterType.GenericTypeArguments;
+                    MethodInfo method = m.MakeGenericMethod(new Type[] { x2[0], x2[1] });
+
+                    var writer = method.Invoke(docStore, new object[] { });
+                    m2.Invoke(instance, new object[] { writer });
+                }
+            }
         }
 
         /// <summary>

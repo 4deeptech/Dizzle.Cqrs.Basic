@@ -59,7 +59,7 @@ namespace Dizzle.Cqrs.Portable.Universal.Tests
             foreach (var typ in projections)
             {
                 var instance = CreateInstanceOf(typ.AsType());
-                //we have out instance of the projection
+                //we have our instance of the projection
                 //now we need to call the GetWriter method on the doc store to get the defined writer for the type defined SetWriter call on the projection
                 var m = _docStore.GetType().GetTypeInfo().DeclaredMethods.Single(t=>t.Name.Equals("GetWriter"));
                 var x = m.GetGenericArguments();

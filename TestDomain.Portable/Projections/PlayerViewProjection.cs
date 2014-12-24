@@ -13,7 +13,9 @@ namespace TestDomain.Projections
 {
     public class PlayerViewProjection : AbstractBaseProjection,
         IApplyEvent<PlayerCreated>,
-        IApplyEvent<PlayerUpdated>
+        IApplyEvent<PlayerUpdated>,
+        ISubscribeTo<PlayerCreated>,
+        ISubscribeTo<PlayerUpdated>
     {
         protected IDocumentWriter<PlayerId, PlayerView> _writer;
 
@@ -43,7 +45,6 @@ namespace TestDomain.Projections
                 FirstName = e.FirstName,
                 LastName = e.LastName
             });
-            
         }
 
         public void Apply(PlayerUpdated e)
@@ -54,6 +55,16 @@ namespace TestDomain.Projections
                 pv.FirstName = e.FirstName;
                 pv.LastName = e.LastName;
             });
+        }
+
+        public void Handle(PlayerCreated e)
+        {
+            Apply(e);
+        }
+
+        public void Handle(PlayerUpdated e)
+        {
+            Apply(e);
         }
     }
 }
