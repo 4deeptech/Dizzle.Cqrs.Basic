@@ -72,7 +72,7 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
         public string Id { get; set; }
         public byte[] Data { get; set; }
         public string Bucket { get; set; }
-        public DateTime DateLastModified { get; set; }
+        public DateTimeOffset DateLastModified { get; set; }
     }
 
     #endregion
@@ -127,6 +127,7 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
                     if (doc != null)
                     {
                         doc.Data = newValue;
+                        doc.DateLastModified = DateTimeOffset.UtcNow;
                         _db.Update(doc);
                         return newValue;
                     }
@@ -138,6 +139,7 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite
                     doc.Id = key;
                     doc.Bucket = key;
                     doc.Data = newValue;
+                    doc.DateLastModified = DateTimeOffset.UtcNow;
                     _db.Insert(doc);
                     return newValue;
                 }

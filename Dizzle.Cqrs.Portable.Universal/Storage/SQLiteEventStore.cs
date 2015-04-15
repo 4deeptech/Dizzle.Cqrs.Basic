@@ -62,18 +62,33 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite.Events
     public class EventStream
     {
         [PrimaryKey]
+        public string UniqueId
+        {
+            get
+            {
+                return Id + "-" + Version;
+            }
+
+            set
+            {
+                //ignore
+            }
+        }
+        [Indexed]
         public string Id { get; set; }
         public byte[] Data { get; set; }
-        public long EventVersion { get; set; }
+        [Indexed]
+        public long StoreVersion { get; set; }
+        [Indexed]
         public long Version { get; set; }
-        public DateTime DateLastModified { get; set; }
+        public DateTimeOffset DateLastModified { get; set; }
 
         public EventStream()
         {
 
         }
 
-        public EventStream(string id, byte[] data, long version, DateTime lastModified)
+        public EventStream(string id, byte[] data, long version, DateTimeOffset lastModified)
         {
             Id = id;
             Data = data;
@@ -90,11 +105,17 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite.Events
     {
         readonly string _path = null;
         SQLiteConnection _db = null;
+        long _storeVersion = 0L;
         public MessageStore(string path, ISQLitePlatform platform)
         {
+            _storeVersion = 0L;
             _path = path;
             _db = new SQLiteConnection(platform, _path);
             _db.CreateTable<EventStream>();
+            //read max store version
+            var command = _db.CreateCommand("SELECT Coalesce(MAX(StoreVersion),1) FROM Streams");
+            var result = command.ExecuteScalar<long>();
+            _storeVersion = result;
         }
 
         public List<IEvent> LoadEventsForStream(string key)
@@ -140,11 +161,12 @@ namespace Dizzle.Cqrs.Portable.Storage.SQLite.Events
                     strategy.Serialize(frame, memory);
                     stream.Data = memory.ToArray();
                 }
-
+                stream.StoreVersion = _storeVersion; 
                 stream.Version = frame.Version;
-                stream.DateLastModified = DateTime.UtcNow;
+                stream.DateLastModified = DateTimeOffset.UtcNow;
                 stream.Id = id;
                 _db.Insert(stream);
+                _storeVersion++;
             }
             catch (Exception ex)
             {
