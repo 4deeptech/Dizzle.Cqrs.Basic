@@ -1,4 +1,13 @@
-﻿using System.Resources;
+﻿//----------------------------------------------------------------------- 
+// <copyright file="AssemblyInfo.cs" company="4Deep Technologies LLC"> 
+// Copyright (c) 4Deep Technologies LLC. All rights reserved. 
+// <author>Darren Ford</author> 
+// <date>Thursday, April 30, 2015 3:00:44 PM</date> 
+// </copyright> 
+//-----------------------------------------------------------------------
+
+
+using System.Resources;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -11,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Dizzle.Cqrs.Portable.Universal")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCopyright("Copyright ?  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: NeutralResourcesLanguage("en")]
