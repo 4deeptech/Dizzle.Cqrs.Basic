@@ -16,6 +16,7 @@ using Dizzle.Cqrs.Portable;
 using Dizzle.Cqrs.Portable.Universal.Tests;
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 using Windows.Storage;
+using SQLite.Net.Interop;
 using SQLite.Net.Platform.WinRT;
 using Dizzle.Cqrs.Portable.Storage.SQLite.Events;
 using TestDomain.Aggregates;
