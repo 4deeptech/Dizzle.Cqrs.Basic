@@ -36,7 +36,7 @@
   </aggregateRoot>
   <domainCommands>
     <aggregateModelHasDomainCommands Id="af25492c-8bd9-46f6-9bff-458c1b0c3362">
-      <domainCommand Id="2d09e4d2-41dd-423c-b969-b25b15145618" name="CreatePlayer">
+      <domainCommand Id="2d09e4d2-41dd-423c-b969-b25b15145618" name="CreatePlayer" description="Create a new player">
         <properties>
           <domainCommandHasProperties Id="1eafab07-54e3-4eff-a755-8b6fae6c548a">
             <property Id="cd511da1-688b-4ef6-a983-260f8d3ce2b8" order="1" name="Id" type="PlayerId" description="The id for the player" />
@@ -54,7 +54,7 @@
       </domainCommand>
     </aggregateModelHasDomainCommands>
     <aggregateModelHasDomainCommands Id="96536892-894b-4258-9887-bfe7bcaf9dbf">
-      <domainCommand Id="4dbe8ea3-4f2f-44b8-a30b-e4336bf56300" name="UpdatePlayer">
+      <domainCommand Id="4dbe8ea3-4f2f-44b8-a30b-e4336bf56300" name="UpdatePlayer" description="Update existing player">
         <properties>
           <domainCommandHasProperties Id="2ab46f80-993f-4f36-9ae3-7fd0c9afef69">
             <property Id="895ccca4-221f-4c51-93ce-4b022a911633" order="1" name="Id" type="PlayerId" description="The id for the player" />
@@ -74,7 +74,7 @@
   </domainCommands>
   <views>
     <aggregateModelHasViews Id="8b44ea65-b912-44d9-8a2b-5ec3a24d5dd1">
-      <view Id="d432879a-ddd0-4545-895e-dd470c93ef2c" name="PlayerView">
+      <view Id="d432879a-ddd0-4545-895e-dd470c93ef2c" name="PlayerView" description="Basic player view">
         <properties>
           <viewHasProperties Id="3d0ebe9f-c65a-4a9b-8c76-4f2b4716f784">
             <property Id="8ff3d4b2-d3eb-4d2d-849d-06d0bf5b34d7" order="1" name="Id" type="PlayerId" description="The id for the player" />
@@ -102,7 +102,7 @@
   </views>
   <domainEvented>
     <aggregateModelHandlesDomainEvents Id="a8837efa-8544-440d-8ae0-50b65b004a9c">
-      <domainEvent Id="e003d162-9205-4907-88fa-1e7364203fc6" name="PlayerCreated">
+      <domainEvent Id="e003d162-9205-4907-88fa-1e7364203fc6" name="PlayerCreated" description="A new player was created">
         <properties>
           <domainEventHasProperties Id="c4f52983-3b32-4d37-ba39-8293e15e125c">
             <property Id="da74040a-0675-4d48-9446-5e0927e52cb1" order="1" name="Id" type="PlayerId" description="The id for the player" />
@@ -120,7 +120,7 @@
       </domainEvent>
     </aggregateModelHandlesDomainEvents>
     <aggregateModelHandlesDomainEvents Id="2c62dddd-1aa3-48f5-b118-88c710ff7f9b">
-      <domainEvent Id="11e60410-0033-4e64-bf0b-c745f8db52fc" name="PlayerUpdated">
+      <domainEvent Id="11e60410-0033-4e64-bf0b-c745f8db52fc" name="PlayerUpdated" description="An existing player was updated">
         <properties>
           <domainEventHasProperties Id="e940e7e3-1087-4069-8d06-dd537e33f8a7">
             <property Id="070c4e97-0b50-4d09-a404-2a372e316068" order="1" name="Id" type="PlayerId" description="The id for the player" />

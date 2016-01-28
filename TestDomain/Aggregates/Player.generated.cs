@@ -26,13 +26,13 @@ namespace TestDomain.Cqrs.Model
 	/// A player
 	/// </summary> 
 	public partial class Player : Aggregate,
-	IHandleCommand<CreatePlayer>
-
-	,IHandleCommand<UpdatePlayer>
+		IHandleCommand<CreatePlayer>
 ,
-	IApplyEvent<PlayerCreated>
-
-	,IApplyEvent<PlayerUpdated>
+		IHandleCommand<UpdatePlayer>
+,
+		IApplyEvent<PlayerCreated>
+,
+		IApplyEvent<PlayerUpdated>
 
 	{
 		/// <summary>
@@ -104,7 +104,7 @@ namespace TestDomain.Cqrs.Model
 namespace TestDomain.Cqrs.Commands 
 {
 	/// <summary>
-	/// 
+	/// Create a new player
 	/// </summary>
 	[DataContract(Namespace = "TestDomain.Cqrs")]
     public partial class CreatePlayer
@@ -155,7 +155,7 @@ namespace TestDomain.Cqrs.Commands
 
 
 	/// <summary>
-	/// 
+	/// Update existing player
 	/// </summary>
 	[DataContract(Namespace = "TestDomain.Cqrs")]
     public partial class UpdatePlayer
@@ -210,7 +210,7 @@ namespace TestDomain.Cqrs.Commands
 namespace TestDomain.Cqrs.Events
 {
 	/// <summary>
-	/// 
+	/// A new player was created
 	/// </summary>
 	[DataContract(Namespace = "TestDomain.Cqrs")]
     public partial class PlayerCreated : IEvent
@@ -261,7 +261,7 @@ namespace TestDomain.Cqrs.Events
 
 
 	/// <summary>
-	/// 
+	/// An existing player was updated
 	/// </summary>
 	[DataContract(Namespace = "TestDomain.Cqrs")]
     public partial class PlayerUpdated : IEvent
@@ -316,7 +316,7 @@ namespace TestDomain.Cqrs.Events
 namespace TestDomain.Cqrs.Views 
 {
 	/// <summary>
-	/// 
+	/// Basic player view
 	/// </summary>
     public partial class PlayerView
     {
