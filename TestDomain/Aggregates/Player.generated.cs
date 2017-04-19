@@ -59,6 +59,12 @@ namespace TestDomain.Cqrs.Model
 		[DataMember(Order = 4)]
         public DateTime? BirthDate { get; internal set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[DataMember(Order = 5)]
+        public String Street { get; internal set; }
+
 
 		public Player()
         {
@@ -134,22 +140,29 @@ namespace TestDomain.Cqrs.Commands
 		[DataMember(Order = 4)] 
         public DateTime? BirthDate { get; private set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[DataMember(Order = 5)] 
+        public String Street { get; private set; }
+
 		public CreatePlayer() 
         {
             
         }
 
-        public CreatePlayer(PlayerId id, String firstName, String lastName, DateTime? birthDate)
+        public CreatePlayer(PlayerId id, String firstName, String lastName, DateTime? birthDate, String street)
         {
             Id = id;
 			FirstName = firstName;
 			LastName = lastName;
 			BirthDate = birthDate;
+			Street = street;
         }
 
         public override string ToString()
         {
-            return string.Format("Type: {0}, Id {1}, FirstName {2}, LastName {3}, BirthDate {4}",GetType().Name, Id, FirstName, LastName, BirthDate);
+            return string.Format("Type: {0}, Id {1}, FirstName {2}, LastName {3}, BirthDate {4}, Street {5}",GetType().Name, Id, FirstName, LastName, BirthDate, Street);
         }
     }//end CreatePlayer class
 
@@ -185,22 +198,29 @@ namespace TestDomain.Cqrs.Commands
 		[DataMember(Order = 4)] 
         public DateTime? BirthDate { get; private set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[DataMember(Order = 5)] 
+        public String Street { get; private set; }
+
 		public UpdatePlayer() 
         {
             
         }
 
-        public UpdatePlayer(PlayerId id, String firstName, String lastName, DateTime? birthDate)
+        public UpdatePlayer(PlayerId id, String firstName, String lastName, DateTime? birthDate, String street)
         {
             Id = id;
 			FirstName = firstName;
 			LastName = lastName;
 			BirthDate = birthDate;
+			Street = street;
         }
 
         public override string ToString()
         {
-            return string.Format("Type: {0}, Id {1}, FirstName {2}, LastName {3}, BirthDate {4}",GetType().Name, Id, FirstName, LastName, BirthDate);
+            return string.Format("Type: {0}, Id {1}, FirstName {2}, LastName {3}, BirthDate {4}, Street {5}",GetType().Name, Id, FirstName, LastName, BirthDate, Street);
         }
     }//end UpdatePlayer class
 
@@ -240,22 +260,29 @@ namespace TestDomain.Cqrs.Events
 		[DataMember(Order = 4)] 
         public DateTime? BirthDate { get; private set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[DataMember(Order = 5)] 
+        public String Street { get; private set; }
+
 		public PlayerCreated() 
         {
             
         }
 
-        public PlayerCreated(PlayerId id, String firstName, String lastName, DateTime? birthDate)
+        public PlayerCreated(PlayerId id, String firstName, String lastName, DateTime? birthDate, String street)
         {
             Id = id;
 			FirstName = firstName;
 			LastName = lastName;
 			BirthDate = birthDate;
+			Street = street;
         }
 
         public override string ToString()
         {
-            return string.Format("Type: {0}, Id {1}, FirstName {2}, LastName {3}, BirthDate {4}",GetType().Name, Id, FirstName, LastName, BirthDate);
+            return string.Format("Type: {0}, Id {1}, FirstName {2}, LastName {3}, BirthDate {4}, Street {5}",GetType().Name, Id, FirstName, LastName, BirthDate, Street);
         }
     }//end PlayerCreated class
 
@@ -291,22 +318,29 @@ namespace TestDomain.Cqrs.Events
 		[DataMember(Order = 4)] 
         public DateTime? BirthDate { get; private set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[DataMember(Order = 5)] 
+        public String Street { get; private set; }
+
 		public PlayerUpdated() 
         {
             
         }
 
-        public PlayerUpdated(PlayerId id, String firstName, String lastName, DateTime? birthDate)
+        public PlayerUpdated(PlayerId id, String firstName, String lastName, DateTime? birthDate, String street)
         {
             Id = id;
 			FirstName = firstName;
 			LastName = lastName;
 			BirthDate = birthDate;
+			Street = street;
         }
 
         public override string ToString()
         {
-            return string.Format("Type: {0}, Id {1}, FirstName {2}, LastName {3}, BirthDate {4}",GetType().Name, Id, FirstName, LastName, BirthDate);
+            return string.Format("Type: {0}, Id {1}, FirstName {2}, LastName {3}, BirthDate {4}, Street {5}",GetType().Name, Id, FirstName, LastName, BirthDate, Street);
         }
     }//end PlayerUpdated class
 
@@ -345,17 +379,24 @@ namespace TestDomain.Cqrs.Views
 		[DataMember(Order = 4)] 
         public DateTime? BirthDate { get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		[DataMember(Order = 5)] 
+        public String Street { get; set; }
+
 		public PlayerView() 
         {
             
         }
 
-        public PlayerView(PlayerId id, String firstName, String lastName, DateTime? birthDate)
+        public PlayerView(PlayerId id, String firstName, String lastName, DateTime? birthDate, String street)
         {
             Id = id;
 			FirstName = firstName;
 			LastName = lastName;
 			BirthDate = birthDate;
+			Street = street;
         }
         
     }//end PlayerView class

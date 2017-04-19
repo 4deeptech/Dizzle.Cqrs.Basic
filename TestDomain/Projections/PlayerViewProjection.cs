@@ -46,7 +46,8 @@ namespace TestDomain.Projections
             {
                 Id = e.Id,
                 FirstName = e.FirstName,
-                LastName = e.LastName
+                LastName = e.LastName,
+                Street = e.Street
             });
         }
 
@@ -57,6 +58,7 @@ namespace TestDomain.Projections
                 pv.Id = e.Id;
                 pv.FirstName = e.FirstName;
                 pv.LastName = e.LastName;
+                pv.Street = e.Street;
             });
         }
     }

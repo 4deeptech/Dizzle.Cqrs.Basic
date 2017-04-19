@@ -35,8 +35,8 @@ namespace TestDomain.Tests
         {
             Test(
                 Given(new List<IEvent>()),
-                When(new CreatePlayer(testId,"FirstName","LastName",null)),
-                Then(new PlayerCreated(testId, "FirstName", "LastName", null))
+                When(new CreatePlayer(testId,"FirstName","LastName",null,"test")),
+                Then(new PlayerCreated(testId, "FirstName", "LastName", null, "test"))
                 );
         }
 
@@ -46,13 +46,13 @@ namespace TestDomain.Tests
             Test(
                 Given(new List<IEvent> { 
 
-                    new PlayerCreated(testId, "FirstName", "LastName", null),
-                    new PlayerUpdated(testId, "FirstName2", "LastName2", null), 
-                    new PlayerUpdated(testId, "FirstName3", "LastName3", null) }),
+                    new PlayerCreated(testId, "FirstName", "LastName", null,"test"),
+                    new PlayerUpdated(testId, "FirstName2", "LastName2", null,"test"), 
+                    new PlayerUpdated(testId, "FirstName3", "LastName3", null,"test") }),
 
-                When(new UpdatePlayer(testId, "FirstName4", "LastName4", null)),
+                When(new UpdatePlayer(testId, "FirstName4", "LastName4", null, "test")),
 
-                Then(new PlayerUpdated(testId, "FirstName4", "LastName4", null))
+                Then(new PlayerUpdated(testId, "FirstName4", "LastName4", null, "test"))
 
                 );
         }

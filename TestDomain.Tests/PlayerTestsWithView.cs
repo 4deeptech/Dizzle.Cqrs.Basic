@@ -35,10 +35,10 @@ namespace TestDomain.Tests
         {
             Test<PlayerId, PlayerView>(
                 Given(new List<IEvent>()),
-                When(new CreatePlayer(testId, "FirstName", "LastName",null)),
-                Then(new PlayerCreated(testId, "FirstName", "LastName",null)),
+                When(new CreatePlayer(testId, "FirstName", "LastName",null,"123 4th Street")),
+                Then(new PlayerCreated(testId, "FirstName", "LastName",null,"123 4th Street")),
                 testId,
-                new PlayerView { Id = testId, FirstName = "FirstName", LastName = "LastName" }
+                new PlayerView { Id = testId, FirstName = "FirstName", LastName = "LastName", Street="123 4th Street" }
                 );
         }
 

@@ -23,13 +23,13 @@ namespace TestDomain.Cqrs.Model
     {
         public IEnumerable<IEvent> Handle(CreatePlayer c)
         {
-            yield return new PlayerCreated(c.Id,c.FirstName,c.LastName, null);
+            yield return new PlayerCreated(c.Id,c.FirstName,c.LastName, null, c.Street);
             
         }
 
         public IEnumerable<IEvent> Handle(UpdatePlayer c)
         {
-            yield return new PlayerUpdated(c.Id, c.FirstName, c.LastName, null);
+            yield return new PlayerUpdated(c.Id, c.FirstName, c.LastName, null,c.Street);
         }
 
         public void Apply(PlayerCreated e)
@@ -37,6 +37,7 @@ namespace TestDomain.Cqrs.Model
             Id = e.Id;
             FirstName = e.FirstName;
             LastName = e.LastName;
+            Street = e.Street;
         }
 
         public void Apply(PlayerUpdated e)
